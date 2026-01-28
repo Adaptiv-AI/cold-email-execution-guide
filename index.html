@@ -166,6 +166,7 @@
             margin-top: 40px;
             font-size: 1.4rem;
         }
+        h4 { margin-bottom: 10px; margin-top: 25px; color: var(--text-main); }
 
         .subtitle {
             color: var(--text-muted);
@@ -248,6 +249,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 0.9rem;
         }
 
         .metrics-table th, .metrics-table td {
@@ -261,6 +263,25 @@
             color: var(--primary-teal);
             font-weight: 700;
         }
+        
+        /* New Styles for Sourcing Grids */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .tier-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .tier-card strong { color: var(--primary-teal); display: block; margin-bottom: 8px; font-size: 1.1em;}
+        .tier-card ul { margin: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-muted); }
+        .tier-card li { margin-bottom: 4px; }
 
         .badge {
             display: inline-block;
@@ -271,6 +292,20 @@
         }
         .badge-good { background: #dcfce7; color: #166534; }
         .badge-bad { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #e0f2fe; color: #0369a1; }
+        
+        /* Resource Links */
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 15px;
+        }
+        .resource-link:hover { text-decoration: underline; }
 
         /* Checklist */
         .checklist-item {
@@ -291,6 +326,15 @@
             cursor: pointer;
             accent-color: var(--primary-teal);
         }
+        
+        .info-block {
+            background: #e0f2fe;
+            color: #0c4a6e;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
 
         /* Warning Box */
         .warning-box {
@@ -308,6 +352,15 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #c026d3; /* Pink for variables */
+            font-size: 0.9em;
         }
 
     </style>
@@ -377,13 +430,9 @@
                             <div class="result-label">Domains Needed</div>
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #64748b;">
-                        *Calculated based on 22 working days/mo and safe sending limit of 25 emails/day per mailbox.
-                    </div>
                 </div>
 
                 <h2>Success KPIs</h2>
-                <p>We do <strong>NOT</strong> track open rates for clients. It hurts deliverability. Focus on these metrics:</p>
                 <table class="metrics-table">
                     <thead>
                         <tr>
@@ -401,12 +450,6 @@
                             <td>Pause client campaign. Warm up for 14 days.</td>
                         </tr>
                         <tr>
-                            <td><strong>1. Tech</strong></td>
-                            <td>Blacklist Status</td>
-                            <td><span class="badge badge-good">Clean</span></td>
-                            <td>Isolate the infected domain.</td>
-                        </tr>
-                        <tr>
                             <td><strong>2. Data</strong></td>
                             <td>Bounce Rate</td>
                             <td><span class="badge badge-good">&lt; 2%</span></td>
@@ -418,18 +461,6 @@
                             <td><span class="badge badge-good">1% - 5%</span></td>
                             <td>If low (<1%), the client's offer is weak. Rewrite Body.</td>
                         </tr>
-                        <tr>
-                            <td><strong>3. Copy</strong></td>
-                            <td>Positive Reply %</td>
-                            <td><span class="badge badge-good">&gt; 50% of replies</span></td>
-                            <td>If leads are angry, check if targeting matches the offer.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>4. Scale</strong></td>
-                            <td>A-Variable</td>
-                            <td><span class="badge badge-good">&lt; 200</span></td>
-                            <td>Optimize the offer to book calls with fewer emails.</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -437,141 +468,197 @@
             <div id="rules" class="module">
                 <span class="subtitle">Critical Compliance</span>
                 <h1>🚫 Safety Protocols</h1>
-                <p>Violating any of these rules puts the client's reputation at risk.</p>
-
                 <div class="warning-box">
                     <h3>1. NO LINKS IN EMAIL 1</h3>
-                    <p>Never include a URL (client website, calendar, YouTube) in the first email. It triggers spam filters instantly. Only send links <strong>after</strong> the lead replies.</p>
+                    <p>Never include a URL (client website, calendar, YouTube) in the first email. It triggers spam filters instantly.</p>
                 </div>
-
                 <div class="warning-box">
                     <h3>2. NO OPEN TRACKING</h3>
-                    <p>Ensure the "Track Open Rate" setting is <strong>OFF</strong> in the client's Instantly campaign. This uses an invisible pixel that hurts deliverability.</p>
+                    <p>Ensure the "Track Open Rate" setting is <strong>OFF</strong>. Invisible pixels hurt deliverability.</p>
                 </div>
-
                 <div class="warning-box">
-                    <h3>3. NEVER USE CLIENT'S MAIN DOMAIN</h3>
-                    <p><strong>CRITICAL:</strong> Never send cold emails from the client's primary domain (e.g., <em>@clientcompany.com</em>). Only purchase and use similar "burner" domains (e.g., <em>@try-clientcompany.com</em>).</p>
-                </div>
-
-                <div class="warning-box">
-                    <h3>4. NO UNSUBSCRIBE LINKS</h3>
-                    <p>Do not use the automatic "Unsubscribe" footer link. It looks like marketing spam. Instead, use natural language: <em>"PS: Let me know if I'm barking up the wrong tree."</em></p>
-                </div>
-
-                <div class="warning-box">
-                    <h3>5. NO AGGRESSIVE SCALING</h3>
-                    <p>Do not send more than <strong>30-50 emails per mailbox per day</strong> for any client. Scaling requires buying them more mailboxes, not increasing volume per mailbox.</p>
+                    <h3>3. NEVER USE MAIN DOMAIN</h3>
+                    <p>Always use "burner" domains (e.g., <em>@try-clientcompany.com</em>) to protect the main website reputation.</p>
                 </div>
             </div>
 
             <div id="phase1" class="module">
                 <span class="subtitle">Operations Phase 01</span>
                 <h1>Tech Setup</h1>
-                <p><strong>Goal:</strong> Build a fortress around the client's main brand.</p>
+                <p><strong>Goal:</strong> Build a fortress around the client's main brand. Follow these steps precisely to ensure 100% deliverability.</p>
+                
+                <div style="margin-bottom: 25px; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <strong>📚 Resource Bank:</strong><br>
+                    <a href="https://support.google.com/a/answer/172171?hl=en" target="_blank" class="resource-link">
+                        🔗 Google Workspace Setup Guide
+                    </a>
+                    <a href="https://www.namecheap.com/support/knowledgebase/article.aspx/317/2237/how-do-i-add-txtspfdkimdmarc-records-for-my-domain/" target="_blank" class="resource-link">
+                        🔗 Namecheap DNS Guide
+                    </a>
+                    <a href="https://help.instantly.ai/en/" target="_blank" class="resource-link">
+                        🔗 Instantly.ai Knowledge Base
+                    </a>
+                </div>
 
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
                         <strong>1. Buy "Burner" Domains</strong><br>
-                        Buy 2-3 secondary domains that look like the client's brand (e.g., <em>get-clientname.com</em>). Forward them to the client's actual website.
+                        Buy 2-3 secondary domains. <br>
+                        <em>Example:</em> If client is <code>acme.com</code>, buy <code>getacme.com</code>, <code>tryacme.com</code>, <code>acme-partners.com</code>.
+                        <br><strong>Important:</strong> Set up a "301 Redirect" so if someone types the burner URL into a browser, it goes to the real website.
                     </div>
                 </div>
 
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>2. Create Google Workspaces</strong><br>
-                        Create 2-3 inboxes per domain. Use real names from the client's team or a generic persona (e.g., "Sarah at ClientCo").
+                        <strong>2. DNS Records (The "Security Guards")</strong><br>
+                        You must add these TXT records to the domain host (Namecheap/GoDaddy):
+                        <div class="info-block">
+                            <strong>SPF (The ID Card):</strong> <code>v=spf1 include:_spf.google.com ~all</code><br>
+                            <em>Tells the internet that Google is allowed to send email for you.</em>
+                            <br><br>
+                            <strong>DKIM (The Digital Signature):</strong> Generated in Google Admin.<br>
+                            <em>Proven cryptographic proof that the email wasn't tampered with.</em>
+                            <br><br>
+                            <strong>DMARC (The Rulebook):</strong> <code>v=DMARC1; p=quarantine;</code><br>
+                            <em>Tells servers what to do if an email fails the ID check (Quarantine it).</em>
+                        </div>
                     </div>
                 </div>
 
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>3. Add DNS Records (The Security Pass)</strong><br>
-                        <ul>
-                            <li><strong>SPF:</strong> <code>v=spf1 include:_spf.google.com ~all</code></li>
-                            <li><strong>DKIM:</strong> Generate via Google Admin.</li>
-                            <li><strong>DMARC:</strong> <code>v=DMARC1; p=quarantine;</code></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="checklist-item">
-                    <input type="checkbox">
-                    <div>
-                        <strong>4. Connect to Instantly.ai</strong><br>
-                        Enable Warm-up. Settings: Increase by 2 per day, Limit to 25. Wait 14 days before launching client campaign.
+                        <strong>3. Warm-up Configuration</strong><br>
+                        Connect to Instantly.ai. Enable "Warm-up".<br>
+                        <strong>Settings:</strong> Ramp up 2/day. Max 25/day. Reply rate 30%.<br>
+                        <span class="badge badge-bad">WAIT 14 DAYS</span> before sending the first sales email.
                     </div>
                 </div>
             </div>
 
             <div id="phase2" class="module">
                 <span class="subtitle">Operations Phase 02</span>
-                <h1>Lead Sourcing</h1>
-                <p><strong>Goal:</strong> Find leads that match the Client's ICP (Ideal Customer Profile).</p>
+                <h1>Lead Sourcing Strategy</h1>
+                <p><strong>Goal:</strong> Utilize the "Jay Method" to layer multiple data sources for maximum relevance.</p>
 
-                <div class="checklist-item">
-                    <input type="checkbox">
-                    <div>
-                        <strong>1. Filter Search (Apollo)</strong><br>
-                        Input Client's criteria: Job Titles, Location, Company Size, Keywords.
+                <h2>1. The Sourcing Mix</h2>
+                <div class="tier-grid">
+                    <div class="tier-card">
+                        <strong>Tier A: Database</strong>
+                        <ul>
+                            <li>Apollo.io</li>
+                            <li>ZoomInfo</li>
+                            <li>Sales Navigator</li>
+                            <li><span class="badge badge-info">Core ICP</span></li>
+                        </ul>
+                    </div>
+                    <div class="tier-card">
+                        <strong>Tier B: Intent</strong>
+                        <ul>
+                            <li>Crunchbase (Funding)</li>
+                            <li>BuiltWith (Tech Stack)</li>
+                            <li>Indeed (Hiring)</li>
+                            <li><span class="badge badge-info">Triggers</span></li>
+                        </ul>
+                    </div>
+                    <div class="tier-card">
+                        <strong>Tier C: Automation</strong>
+                        <ul>
+                            <li><strong>Apify</strong> (Scrapers)</li>
+                            <li>Google Maps (Local)</li>
+                            <li>Instagram Followers</li>
+                            <li><span class="badge badge-info">Niche Data</span></li>
+                        </ul>
                     </div>
                 </div>
 
+                <h2>2. Automation & Scraping (Apify)</h2>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>2. Clean Data (Million Verifier)</strong><br>
-                        Upload CSV to verifier. <strong>Only download "Valid/Good" emails.</strong> Do not risk the client's domains on "Risky" emails.
+                        <strong>Leverage Apify Actors</strong><br>
+                        For campaigns requiring data not found in Apollo (e.g., "All plumbers in Austin with >4 stars" or "Followers of @CompetitorBrand"), use <strong>Apify</strong>.
+                        <br><em>Workflow:</em> Scrape JSON → Convert to CSV → Upload to Clay for Enrichment → Export to Instantly.
                     </div>
                 </div>
-                
-                <p style="margin-top: 20px; font-style: italic; color: #64748b;">
-                    *Note: Sending to bad data causes bounces, which gets domains blacklisted. Always clean the client's list.
-                </p>
+
+                <h2>3. List Schema Requirement</h2>
+                <p>Your CSV upload must contain these fields to enable our AI writing agents.</p>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>CSV Header</th>
+                            <th>Description</th>
+                            <th>Why it is needed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>First_Name</code></td>
+                            <td>Lead First Name</td>
+                            <td>Basic greeting variable.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Company_Name</code></td>
+                            <td>Company</td>
+                            <td>"I saw that {{Company_Name}} is..."</td>
+                        </tr>
+                        <tr>
+                            <td><code>Icebreaker_Raw</code></td>
+                            <td><strong>Scraped Data</strong></td>
+                            <td>The raw text (website snippet/LinkedIn bio) the AI uses to write the custom line.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Email_Address</code></td>
+                            <td><strong>Verified</strong> Email</td>
+                            <td>Must include ONLY "Valid" emails.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div id="phase3" class="module">
                 <span class="subtitle">Operations Phase 03</span>
                 <h1>Copywriting Strategy</h1>
-                <p><strong>Goal:</strong> Start a conversation for the client. Do not pitch. Sell the "next step."</p>
+                <p><strong>Goal:</strong> Start a conversation. Do not pitch. Sell the "next step."</p>
+
+                <div class="warning-box" style="background: #fffbeb; border-color: #f59e0b; color: #92400e;">
+                    <h3>⚡ The 3-Second Mobile Test</h3>
+                    <p>Read the email on your phone. If you have to scroll to read it, <strong>it is too long.</strong> Cut it in half.</p>
+                </div>
 
                 <h2>The "Triple Tap" Structure</h2>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>1. The Preview (Subject + Line 1)</strong><br>
-                        Subject: "Question for {{firstName}}" (Boring wins).<br>
-                        Line 1: "Hey {{firstName}}, just wondering if you are handling [Client's Service Area]?"
+                        <strong>1. The "Pattern Interrupt" Subject</strong><br>
+                        Avoid "Marketing Services" or "Partnership".<br>
+                        <em>Use:</em> "Question for {{firstName}}", "Quick question", "About {{Company_Name}}".
                     </div>
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>2. The Body (Value)</strong><br>
-                        State the client's value prop in 6th grade reading level.<br>
-                        <em>"We help [Target Industry] solve [Specific Problem] without [Pain Point]."</em>
+                        <strong>2. Contextual Bridge</strong><br>
+                        Connect the observation to the problem.<br>
+                        <em>"I was looking at {{Company_Name}} and noticed you're using Shopify..."</em>
                     </div>
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>3. The CTA (Low Friction)</strong><br>
-                        <strong>NO LINKS ALLOWED.</strong> Ask for interest.<br>
-                        <em>"Mind if I send over a quick video explaining how?"</em>
+                        <strong>3. Soft CTA (Call to Action)</strong><br>
+                        Never ask for 15 minutes or a meeting. Ask for <strong>permission</strong> to send assets.<br>
+                        <em>"Mind if I send over a 2-min video explaining how we fixed this for [Competitor]?"</em>
                     </div>
                 </div>
 
-                <h2>Spintax (Anti-Spam)</h2>
-                <div class="checklist-item">
-                    <input type="checkbox">
-                    <div>
-                        <strong>Apply Spintax in Instantly</strong><br>
-                        Ensure variations are set so the client's message is unique for every send.<br>
-                        <code>{{Hi | Hello | Hey}} {{firstName}},</code>
-                    </div>
+                <h4>🚫 The Anti-Spam Dictionary (Do Not Use)</h4>
+                <div style="background: #f1f5f9; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.9em;">
+                    "Guarantee", "Free", "no-risk", "limited time", "$$$", "100%", "Click here", "Buy now"
                 </div>
             </div>
 
@@ -579,35 +666,40 @@
                 <span class="subtitle">Operations Phase 04</span>
                 <h1>Launch & Management</h1>
 
-                <h2>Sending Rules Checklist</h2>
-                <div class="checklist-item" style="border-left: 4px solid var(--danger);">
-                    <input type="checkbox">
-                    <div>
-                        <strong>1. Tracking Settings OFF</strong><br>
-                        Ensure "Open Tracking" is disabled in the client's Instantly settings.
-                    </div>
-                </div>
-                <div class="checklist-item" style="border-left: 4px solid var(--danger);">
-                    <input type="checkbox">
-                    <div>
-                        <strong>2. Text Only Mode</strong><br>
-                        Ensure "Send as Plain Text" is enabled. No HTML, no fancy signatures with logos.
-                    </div>
-                </div>
+                <h2>🚀 Ramp-Up Schedule</h2>
+                <p>Do not blast 50 emails on Day 1. Use this schedule per mailbox:</p>
+                <table class="metrics-table">
+                    <tr>
+                        <td><strong>Week 1 (Warmup Only)</strong></td>
+                        <td>0 Sales Emails / 20 Warmup Emails</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Week 2</strong></td>
+                        <td>10 Sales Emails / 20 Warmup Emails</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Week 3</strong></td>
+                        <td>20 Sales Emails / 15 Warmup Emails</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Week 4 (Full Speed)</strong></td>
+                        <td>30-40 Sales Emails / 10 Warmup Emails</td>
+                    </tr>
+                </table>
 
                 <h2>Daily Operations</h2>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>1. Monitor Client Unibox</strong><br>
-                        Reply to positive leads within 10 minutes. THIS is when you send the client's calendar link.
+                        <strong>1. Inbox Rotation</strong><br>
+                        Instantly rotates senders automatically. Monitor "Master Inbox" to ensure one domain isn't getting all the bounces. If one domain has high bounces, <strong>pause it</strong> immediately.
                     </div>
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox">
                     <div>
-                        <strong>2. Remove Bounces</strong><br>
-                        If the client's campaign exceeds 2% bounce rate, PAUSE immediately and re-verify data.
+                        <strong>2. The "Positive Signal" Trick</strong><br>
+                        Check your spam folder in the burner accounts. If you see your own warmup emails in Spam, move them to Inbox and mark as "Important". This trains Google's AI that you are safe.
                     </div>
                 </div>
             </div>
@@ -658,5 +750,4 @@
         calculateA();
     </script>
 </body>
-
 </html>
