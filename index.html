@@ -3,22 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdaptivAI | Client Campaign Execution SOP</title>
+    <title>AdaptivAI | Execution Blueprint</title>
     <style>
         :root {
-            /* AdaptivAI Light Theme */
-            --bg-body: #f1f5f9;       /* Light Blue-Gray */
-            --bg-card: #ffffff;       /* Pure White */
-            --text-main: #0f172a;     /* Deep Navy/Black */
-            --text-muted: #64748b;    /* Slate Gray */
-            --primary-teal: #0d9488;  /* Darker Teal for contrast */
-            --teal-light: #ccfbf1;    /* Light Teal background */
+            /* Light Theme (Default) */
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary-teal: #0d9488; /* Standard Teal */
+            --teal-light: #ccfbf1;
             --border-color: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --danger-bg: #fee2e2;
+            --sidebar-bg: #ffffff;
+            --calculator-bg: #f8fafc;
+            --code-bg: #f1f5f9;
+            --warning-bg: #fee2e2;
+            --warning-text: #7f1d1d;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --info-bg: #e0f2fe;
+            --info-text: #0c4a6e;
+            
             --sidebar-width: 280px;
             --transition-speed: 0.3s;
+        }
+
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-teal: #2dd4bf; /* Brighter teal for dark mode visibility */
+            --teal-light: #134e4a;   /* Dark teal bg */
+            --border-color: #334155;
+            --sidebar-bg: #1e293b;
+            --calculator-bg: #0f172a;
+            --code-bg: #334155;
+            --warning-bg: #450a0a;
+            --warning-text: #fca5a5;
+            --success-bg: #064e3b;
+            --success-text: #86efac;
+            --info-bg: #0c4a6e;
+            --info-text: #7dd3fc;
         }
 
         * { box-sizing: border-box; }
@@ -31,20 +58,22 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* Sidebar Styling */
         .sidebar {
             width: var(--sidebar-width);
-            background-color: var(--bg-card);
+            background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             padding: 24px;
             flex-shrink: 0;
-            transition: width var(--transition-speed) ease, padding var(--transition-speed) ease;
+            transition: all 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
+            position: relative;
         }
 
         .sidebar.collapsed {
@@ -53,10 +82,12 @@
             border-right: none;
         }
 
+        /* LOGO STYLING */
         .brand-header {
             margin-bottom: 30px;
             opacity: 1;
             transition: opacity 0.2s;
+            text-align: center;
         }
         
         .sidebar.collapsed .brand-header {
@@ -65,14 +96,18 @@
         }
 
         .brand-logo {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--text-main);
-            letter-spacing: -0.02em;
-            margin-bottom: 5px;
+            letter-spacing: -0.04em; /* Tight tracking like your image */
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: 'Inter', sans-serif;
         }
 
-        .brand-logo span { color: var(--primary-teal); }
+        .brand-logo span { 
+            color: var(--primary-teal); 
+        }
 
         .nav-item {
             background: transparent;
@@ -96,11 +131,23 @@
             background-color: var(--teal-light);
             color: var(--primary-teal);
         }
+        
+        /* Dark mode hover fix */
+        [data-theme="dark"] .nav-item:hover {
+             color: #ffffff;
+        }
 
         .nav-item.active {
             background-color: var(--primary-teal);
             color: white;
             font-weight: 600;
+        }
+
+        /* Theme Toggle Button Container */
+        .theme-toggle-container {
+            margin-top: auto; 
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
         /* Main Content */
@@ -113,7 +160,7 @@
             position: relative;
         }
 
-        /* Toggle Button */
+        /* Toggle Sidebar Button */
         .toggle-btn {
             position: absolute;
             top: 20px;
@@ -127,11 +174,12 @@
             color: var(--text-muted);
             font-size: 1.2rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: color 0.2s;
+            transition: all 0.2s;
         }
 
         .toggle-btn:hover {
             color: var(--primary-teal);
+            border-color: var(--primary-teal);
         }
 
         .scrollable-content {
@@ -149,6 +197,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             animation: fadeIn 0.3s ease;
+            border: 1px solid var(--border-color);
         }
 
         .module.active { display: block; }
@@ -180,7 +229,7 @@
 
         /* Calculator Styles */
         .calculator-box {
-            background-color: #f8fafc;
+            background-color: var(--calculator-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 30px;
@@ -209,6 +258,8 @@
             border-radius: 6px;
             font-size: 1rem;
             font-family: inherit;
+            background-color: var(--bg-card);
+            color: var(--text-main);
         }
 
         .input-group input:focus {
@@ -221,7 +272,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            background: var(--text-main);
+            background: #0f172a; /* Always dark for contrast */
             color: white;
             padding: 20px;
             border-radius: 8px;
@@ -242,6 +293,7 @@
             font-size: 0.8rem;
             opacity: 0.8;
             text-transform: uppercase;
+            color: #e2e8f0;
         }
 
         /* ROI Specific Styles */
@@ -271,12 +323,17 @@
             text-align: left;
             padding: 12px;
             border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
         }
 
         .metrics-table th {
             background-color: var(--teal-light);
             color: var(--primary-teal);
             font-weight: 700;
+        }
+        
+        [data-theme="dark"] .metrics-table th {
+            color: #ffffff;
         }
         
         /* New Styles for Sourcing Grids */
@@ -288,7 +345,7 @@
         }
         
         .tier-card {
-            background: #f8fafc;
+            background: var(--calculator-bg);
             border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 8px;
@@ -305,9 +362,9 @@
             font-size: 0.75rem;
             font-weight: 700;
         }
-        .badge-good { background: #dcfce7; color: #166534; }
-        .badge-bad { background: #fee2e2; color: #991b1b; }
-        .badge-info { background: #e0f2fe; color: #0369a1; }
+        .badge-good { background: var(--success-bg); color: var(--success-text); }
+        .badge-bad { background: var(--warning-bg); color: var(--warning-text); }
+        .badge-info { background: var(--info-bg); color: var(--info-text); }
         
         /* Resource Links */
         .resource-link {
@@ -324,7 +381,7 @@
 
         /* Checklist */
         .checklist-item {
-            background-color: #f8fafc;
+            background-color: var(--calculator-bg);
             border: 1px solid var(--border-color);
             padding: 16px;
             margin-bottom: 12px;
@@ -343,8 +400,8 @@
         }
         
         .info-block {
-            background: #e0f2fe;
-            color: #0c4a6e;
+            background: var(--info-bg);
+            color: var(--info-text);
             padding: 15px;
             border-radius: 6px;
             font-size: 0.9rem;
@@ -353,24 +410,24 @@
 
         /* Warning Box */
         .warning-box {
-            background-color: var(--danger-bg);
-            border-left: 4px solid var(--danger);
+            background-color: var(--warning-bg);
+            border-left: 4px solid #ef4444; 
             padding: 20px;
             border-radius: 6px;
             margin: 20px 0;
-            color: #7f1d1d;
+            color: var(--warning-text);
         }
 
         .warning-box h3 {
             margin-top: 0;
-            color: #991b1b;
+            color: var(--warning-text);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         code {
-            background: #f1f5f9;
+            background: var(--code-bg);
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
@@ -384,7 +441,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="brand-header">
-            <div class="brand-logo">Adaptiv<span>AI</span></div>
+            <div class="brand-logo">adaptiv<span>AI</span></div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">Execution Guide</div>
         </div>
 
@@ -406,6 +463,12 @@
         <button class="nav-item" onclick="switchTab('phase4')">
             <span class="nav-icon">04</span> Launch & Manage
         </button>
+
+        <div class="theme-toggle-container">
+            <button class="nav-item" onclick="toggleTheme()" id="themeBtn">
+                <span class="nav-icon">🌙</span> Dark Mode
+            </button>
+        </div>
     </div>
 
     <div class="content-area">
@@ -427,7 +490,7 @@
                         <div class="input-group">
                             <label>📉 "A" Variable (Emails to Book 1 Call)</label>
                             <input type="number" id="aNumber" value="200" oninput="calculateAll()">
-                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 5px;">*The <strong>Adaptiv Variable</strong>. Use 200 for generic B2B. Use 100 for high-ticket/niche offers.</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">*The <strong>Adaptiv Variable</strong>. Use 200 for generic B2B. Use 100 for high-ticket/niche offers.</div>
                         </div>
                     </div>
 
@@ -467,7 +530,7 @@
                         </div>
                     </div>
 
-                    <div class="results-grid" style="background: #0f172a;">
+                    <div class="results-grid">
                         <div class="result-item">
                             <div class="result-value" id="resRevenue">$20,000</div>
                             <div class="result-label">Projected Revenue</div>
@@ -675,7 +738,7 @@
                 <h1>Copywriting Strategy</h1>
                 <p><strong>Goal:</strong> Start a conversation. Do not pitch. Sell the "next step."</p>
 
-                <div class="warning-box" style="background: #fffbeb; border-color: #f59e0b; color: #92400e;">
+                <div class="warning-box" style="background: var(--warning-bg); border-color: #f59e0b; color: var(--warning-text);">
                     <h3>⚡ The 3-Second Mobile Test</h3>
                     <p>Read the email on your phone. If you have to scroll to read it, <strong>it is too long.</strong> Cut it in half.</p>
                 </div>
@@ -707,7 +770,7 @@
                 </div>
 
                 <h4>🚫 The Anti-Spam Dictionary (Do Not Use)</h4>
-                <div style="background: #f1f5f9; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.9em;">
+                <div style="background: var(--code-bg); padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.9em;">
                     "Guarantee", "Free", "no-risk", "limited time", "$$$", "100%", "Click here", "Buy now"
                 </div>
             </div>
@@ -770,51 +833,40 @@
             if(map[tabId] !== undefined) buttons[map[tabId]].classList.add('active');
         }
 
+        // --- CALCULATOR LOGIC ---
         function calculateAll() {
-            // --- VOLUME CALCULATION ---
+            // Volume Calcs
             const targetCalls = parseFloat(document.getElementById('targetCalls').value) || 0;
             const aNumber = parseFloat(document.getElementById('aNumber').value) || 0;
             
-            // Constants from SOP
-            const workingDays = 22; // Avg working days in a month
-            const safeDailyLimit = 25; // Emails per mailbox per day
-            const domainsDensity = 3; // Mailboxes per domain
+            const workingDays = 22; 
+            const safeDailyLimit = 25; 
+            const domainsDensity = 3; 
 
-            // Logic
             const monthlyEmails = targetCalls * aNumber;
             const dailyVolume = monthlyEmails / workingDays;
             const mailboxes = Math.ceil(dailyVolume / safeDailyLimit);
             const domains = Math.ceil(mailboxes / domainsDensity);
 
-            // Update Volume UI
             document.getElementById('resEmails').innerText = monthlyEmails.toLocaleString();
             document.getElementById('resMailboxes').innerText = mailboxes;
             document.getElementById('resDomains').innerText = domains;
 
-            // --- ROI CALCULATION ---
+            // ROI Calcs
             const dealValue = parseFloat(document.getElementById('dealValue').value) || 0;
             const demosToClose = parseFloat(document.getElementById('demosToClose').value) || 1;
             const campaignCost = parseFloat(document.getElementById('campaignCost').value) || 0;
 
-            // Calculate Metrics
-            // 1. How many closes from the Target Calls?
             const projectedCloses = targetCalls / demosToClose;
-            
-            // 2. Projected Revenue
             const projectedRevenue = projectedCloses * dealValue;
-
-            // 3. Net Profit
             const netProfit = projectedRevenue - campaignCost;
 
-            // 4. ROI %
             let roi = 0;
             if(campaignCost > 0) {
                 roi = (netProfit / campaignCost) * 100;
             }
 
-            // Benchmark Logic (Industry Standard ~20% close rate, aka 1 in 5 demos)
-            // If user takes <5 demos to close, they are better than average.
-            // If user takes >5 demos, they are worse.
+            // Benchmarking
             const benchmarkBadge = document.getElementById('benchmarkBadge');
             if(demosToClose <= 4) {
                 benchmarkBadge.innerHTML = '<span class="badge badge-good">🔥 Above Industry Avg</span>';
@@ -824,19 +876,42 @@
                 benchmarkBadge.innerHTML = '<span class="badge badge-bad">⚠️ Below Industry Avg</span>';
             }
 
-            // Update ROI UI
+            // ROI UI
             document.getElementById('resRevenue').innerText = '$' + Math.round(projectedRevenue).toLocaleString();
             document.getElementById('resProfit').innerText = '$' + Math.round(netProfit).toLocaleString();
             document.getElementById('resROI').innerText = Math.round(roi) + '%';
             
-            // Color code ROI
             const roiEl = document.getElementById('resROI');
-            if(roi > 0) roiEl.style.color = '#10b981'; // Green
-            else roiEl.style.color = '#ef4444'; // Red
+            if(roi > 0) roiEl.style.color = '#10b981'; 
+            else roiEl.style.color = '#ef4444'; 
         }
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // --- DARK MODE LOGIC ---
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            const currentTheme = body.getAttribute('data-theme');
+
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                btn.innerHTML = '<span class="nav-icon">🌙</span> Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '<span class="nav-icon">☀️</span> Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeBtn').innerHTML = '<span class="nav-icon">☀️</span> Light Mode';
         }
 
         // Initialize calc on load
