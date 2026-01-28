@@ -244,6 +244,21 @@
             text-transform: uppercase;
         }
 
+        /* ROI Specific Styles */
+        .roi-header {
+            margin-top: 40px;
+            border-top: 2px dashed var(--border-color);
+            padding-top: 30px;
+        }
+        
+        .benchmark-badge {
+            font-size: 0.75rem; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
         /* Metrics Table */
         .metrics-table {
             width: 100%;
@@ -374,7 +389,7 @@
         </div>
 
         <button class="nav-item active" onclick="switchTab('metrics')">
-            <span class="nav-icon">📊</span> Metrics & Calculator
+            <span class="nav-icon">📊</span> Metrics & Calculators
         </button>
         <button class="nav-item" onclick="switchTab('rules')">
             <span class="nav-icon">🚫</span> Safety Rules
@@ -407,11 +422,11 @@
                     <div class="calc-grid">
                         <div class="input-group">
                             <label>🎯 Client's Monthly Call Goal</label>
-                            <input type="number" id="targetCalls" value="20" oninput="calculateA()">
+                            <input type="number" id="targetCalls" value="20" oninput="calculateAll()">
                         </div>
                         <div class="input-group">
                             <label>📉 "A" Variable (Emails to Book 1 Call)</label>
-                            <input type="number" id="aNumber" value="200" oninput="calculateA()">
+                            <input type="number" id="aNumber" value="200" oninput="calculateAll()">
                             <div style="font-size: 0.75rem; color: #64748b; margin-top: 5px;">*The <strong>Adaptiv Variable</strong>. Use 200 for generic B2B. Use 100 for high-ticket/niche offers.</div>
                         </div>
                     </div>
@@ -432,6 +447,41 @@
                     </div>
                 </div>
 
+                <h1 class="roi-header">💰 ROI Projection Engine</h1>
+                <p>Compare the client's projected returns against the B2B Industry Standard conversion rate (20% close rate on demos).</p>
+                
+                <div class="calculator-box" style="border-left: 4px solid var(--primary-teal);">
+                    <div class="calc-grid">
+                        <div class="input-group">
+                            <label>💵 Average Deal Value ($)</label>
+                            <input type="number" id="dealValue" value="5000" oninput="calculateAll()">
+                        </div>
+                        <div class="input-group">
+                            <label>🤝 Demos Needed to Close 1 Deal</label>
+                            <input type="number" id="demosToClose" value="5" oninput="calculateAll()">
+                            <div id="benchmarkBadge" style="margin-top:5px; font-size: 0.8rem;"></div>
+                        </div>
+                        <div class="input-group">
+                            <label>💸 Monthly Campaign Cost ($)</label>
+                            <input type="number" id="campaignCost" value="3000" oninput="calculateAll()">
+                        </div>
+                    </div>
+
+                    <div class="results-grid" style="background: #0f172a;">
+                        <div class="result-item">
+                            <div class="result-value" id="resRevenue">$20,000</div>
+                            <div class="result-label">Projected Revenue</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="resProfit">$17,000</div>
+                            <div class="result-label">Net Profit</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="resROI" style="color: #10b981;">566%</div>
+                            <div class="result-label">Campaign ROI</div>
+                        </div>
+                    </div>
+                </div>
                 <h2>Success KPIs</h2>
                 <table class="metrics-table">
                     <thead>
@@ -720,8 +770,8 @@
             if(map[tabId] !== undefined) buttons[map[tabId]].classList.add('active');
         }
 
-        function calculateA() {
-            // Inputs
+        function calculateAll() {
+            // --- VOLUME CALCULATION ---
             const targetCalls = parseFloat(document.getElementById('targetCalls').value) || 0;
             const aNumber = parseFloat(document.getElementById('aNumber').value) || 0;
             
@@ -736,10 +786,53 @@
             const mailboxes = Math.ceil(dailyVolume / safeDailyLimit);
             const domains = Math.ceil(mailboxes / domainsDensity);
 
-            // Update UI
+            // Update Volume UI
             document.getElementById('resEmails').innerText = monthlyEmails.toLocaleString();
             document.getElementById('resMailboxes').innerText = mailboxes;
             document.getElementById('resDomains').innerText = domains;
+
+            // --- ROI CALCULATION ---
+            const dealValue = parseFloat(document.getElementById('dealValue').value) || 0;
+            const demosToClose = parseFloat(document.getElementById('demosToClose').value) || 1;
+            const campaignCost = parseFloat(document.getElementById('campaignCost').value) || 0;
+
+            // Calculate Metrics
+            // 1. How many closes from the Target Calls?
+            const projectedCloses = targetCalls / demosToClose;
+            
+            // 2. Projected Revenue
+            const projectedRevenue = projectedCloses * dealValue;
+
+            // 3. Net Profit
+            const netProfit = projectedRevenue - campaignCost;
+
+            // 4. ROI %
+            let roi = 0;
+            if(campaignCost > 0) {
+                roi = (netProfit / campaignCost) * 100;
+            }
+
+            // Benchmark Logic (Industry Standard ~20% close rate, aka 1 in 5 demos)
+            // If user takes <5 demos to close, they are better than average.
+            // If user takes >5 demos, they are worse.
+            const benchmarkBadge = document.getElementById('benchmarkBadge');
+            if(demosToClose <= 4) {
+                benchmarkBadge.innerHTML = '<span class="badge badge-good">🔥 Above Industry Avg</span>';
+            } else if (demosToClose == 5) {
+                benchmarkBadge.innerHTML = '<span class="badge badge-info">🔹 Industry Standard</span>';
+            } else {
+                benchmarkBadge.innerHTML = '<span class="badge badge-bad">⚠️ Below Industry Avg</span>';
+            }
+
+            // Update ROI UI
+            document.getElementById('resRevenue').innerText = '$' + Math.round(projectedRevenue).toLocaleString();
+            document.getElementById('resProfit').innerText = '$' + Math.round(netProfit).toLocaleString();
+            document.getElementById('resROI').innerText = Math.round(roi) + '%';
+            
+            // Color code ROI
+            const roiEl = document.getElementById('resROI');
+            if(roi > 0) roiEl.style.color = '#10b981'; // Green
+            else roiEl.style.color = '#ef4444'; // Red
         }
 
         function toggleSidebar() {
@@ -747,7 +840,7 @@
         }
 
         // Initialize calc on load
-        calculateA();
+        calculateAll();
     </script>
 </body>
 </html>
